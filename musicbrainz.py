@@ -4,10 +4,11 @@ from __future__ import unicode_literals
 import musicbrainzngs
 import sys
 
+
 musicbrainzngs.set_useragent(
-    "python-musicbrainzngs-example",
-    "0.1",
-    "https://github.com/alastair/python-musicbrainzngs/",
+    "py_mb_update",
+    "Dev-0.9",
+    "https://github.com/dabartmess/py_mb_update/"
 )
 
 
@@ -22,17 +23,19 @@ def get_tracklist(artist, album):
     for x in range(len(t)):
         line = (t[x])
         print(f'{line["number"]}. {line["recording"]["title"]}')
+        print({line["recording"]["genre"]})
 
 
 if __name__ == '__main__':
     ### get first release
-    if len(sys.argv) > 1:
-        artist, album = [sys.argv[1], sys.argv[2]]
+    #if len(sys.argv) > 1:
+        #artist, album = [sys.argv[1], sys.argv[2]]
+        artist, album = ["Pink Floyd", "Dark Side of the Moon"]
         get_tracklist(artist, album)
-    else:
-        artist = input("Artist: ")
-        album = input("Album: ")
-        if not artist == "" and not album == "":
-            get_tracklist(artist, album)
-        else:
-            print("Artist or Album missing")
+    #else:
+    #    artist = input("Artist: ")
+    #    album = input("Album: ")
+    #    if not artist == "" and not album == "":
+    #        get_tracklist(artist, album)
+    #    else:
+    #        print("Artist or Album missing")
