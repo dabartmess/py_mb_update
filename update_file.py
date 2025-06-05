@@ -20,6 +20,7 @@ from musicbrainzngs import (search_releases, search_artists, browse_releases, br
                             musicbrainz, ResponseError, InvalidFilterError)
 
 filelist = []
+files = []
 
 set_useragent(
     "py_mb_update",
@@ -27,8 +28,7 @@ set_useragent(
     "https://github.com/dabartmess/py_mb_update/"
 )
 
-
-def modify_audio_file(artist: str, path: str):
+def get_audio_data(artist: str, path: str):
     tmpnames = []
     filelist = []
 
@@ -41,24 +41,23 @@ def modify_audio_file(artist: str, path: str):
                     # print("file_in: ", file_in)
                     filelist.append(file_in)
 
-    # print(filelist)
+    print(filelist)
 
     for f in filelist:
         print("File: ", f)
         a_tag = TinyTag.get(f)
-
-        audio = AudioFile
+        a_tag.
+        #audio = AudioFile
         # print("Audio: ", f)
-        try:
-            if os.path.exists(f):
-                audio = id3.core.load(f)
-            else:
-                print("Path does not exist: ", f)
-        except IOError as exc:
-            print("IOError: ", exc)
+        #try:
+        #    if os.path.exists(f):
+        #        audio = id3.core.load(f)
+        #    else:
+        #        print("Path does not exist: ", f)
+        #except IOError as exc:
+        #    print("IOError: ", exc)
 
         result2 = {}
-        files = []
         if (audio.tag):
             if (audio.tag.artist == None or audio.tag.album_artist == None):
                 print("NO Album or Artist")
@@ -75,12 +74,12 @@ def modify_audio_file(artist: str, path: str):
                     except urllib.error.HTTPError as exc:
                         print("HTTP Error: ", exc.reason)
                     except musicbrainz.WebServiceError as exc:
-                        print("WebServiceErrorL: ", exc)
+                        print("WebServiceError: ", exc)
+                        sys.exit(-1)
                     except ResponseError as exc:
                         print("Response Error: ", exc)
                         if "Bad Request" not in str(exc.cause):
                             print("Response Error: ", exc.cause)
-                            break
                     except Exception as exc:
                         print("Non-specific exception: ", exc)
 
@@ -92,13 +91,31 @@ def modify_audio_file(artist: str, path: str):
     print("No of Filelist: ", len(filelist))
     print("No of Files: ", len(files))
 
-    return files
+    return filelist
+
+def modify_audio_data(filepaths: []):
+    for f in filepaths:
+        a_tag = TinyTag.get(f)
+
+        audio = AudioFile
+        # print("Audio: ", f)
+        try:
+            if os.path.exists(f):
+                audio = id3.core.load(f)
+            else:
+                print("Path does not exist: ", f)
+        except IOError as exc:
+            print("IOError: ", exc)
+
+
 
 def oserror_o(error: OSError):
     print(error.strerror)
 
+
 if __name__ == '__main__':
     artist = "*"
+    currfiles = []
     if len(sys.argv) > 1:
         artist = [sys.argv[1]]
         print(artist)
@@ -110,4 +127,5 @@ if __name__ == '__main__':
         path = os.getcwd()
         print("CurrDir")
 
-    modify_audio_file(artist, path);
+    filepaths = get_audio_data(artist, path);
+    complete_files = modify_audio_data(filepaths)

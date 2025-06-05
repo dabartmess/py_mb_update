@@ -60,7 +60,7 @@ def get_metadata(artist, silent: bool):
     )
 
     print("Entering get_metadata")
-    #print("Artist Info:", artist)
+    print("Artist Info:", artist)
     try:
         results = search_artists(query=artist)['artist-list'][0]
     except musicbrainzngs.MusicBrainzError as exc:
